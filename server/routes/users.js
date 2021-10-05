@@ -1,4 +1,5 @@
 const router = require('express').Router();
+const { Op } = require('sequelize');
 const {
   models: { User },
 } = require('../db');
@@ -17,6 +18,19 @@ const {
  */
 
 // Add your routes here:
+
+router.get('/', async (req, res, next) => {
+  const username = req.query.name;
+  const allUsers = await User.findAll({
+    where: {
+      name: {
+        [Op.iLike]: `%${username}%`,
+      },
+    },
+  });
+
+  res.send(allUsers);
+});
 
 router.get('/unassigned', async (req, res, next) => {
   try {

@@ -56,18 +56,21 @@ User.findTeachersAndMentees = function () {
   return teachers;
 };
 
+//instance methods
+User.prototype.getPeers = function () {
+  const mentorsStudents = User.findAll({
+    where: {
+      mentorId: this.mentorId,
+      id: {
+        [Op.ne]: this.id,
+      },
+    },
+  });
+
+  return mentorsStudents;
+};
+
 //hooks
-
-//can't update user with mentor who is not a teacher
-// User.beforeUpdate(async (user) => {
-//   const mentor = await User.findByPk(user.mentorId);
-
-//   if (!mentor.isTeacher) {
-//     throw new Error(
-//       `We shouldn't be able to update ${user.name} with ${mentor.name} as a mentor, because ${mentor.name} is not a TEACHER`
-//     );
-//   }
-// });
 
 User.beforeUpdate(async (user) => {
   const mentor = await User.findByPk(user.mentorId);
