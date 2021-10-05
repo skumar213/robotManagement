@@ -101,18 +101,36 @@ User.beforeUpdate(async (user) => {
     const mentorIds = allMentors.map((obj) => obj.mentorId);
 
     if (mentorIds.includes(user.id)) {
-      const student = await User.findOne({
+      const student = await User.findAll({
         where: {
           mentorId: user.id,
         },
       });
 
+      const names = student.map((obj) => obj.name);
+
+      console.log(names);
+
       throw new Error(
-        `We shouldn't be able to update ${user.name} to a STUDENT, because ${student.name} is their mentee`
+        `We shouldn't be able to update ${
+          user.name
+        } to a STUDENT, because ${names.join(', ')} is their mentee`
       );
     }
   }
 });
+
+// User.beforeUpdate(async (user) => {
+//   const itemsChanged = user._changed.has('userType');
+
+//   console.log('----------------', itemsChanged);
+
+//   if (itemsChanged === true) {
+//     console.log('----------------', itemsChanged);
+
+//     throw new Error('update error');
+//   }
+// });
 
 /**
  * We've created the association for you!

@@ -72,6 +72,8 @@ router.delete('/:id', async (req, res, next) => {
 
 router.post('/', async (req, res, next) => {
   try {
+    req.body.name = req.body.name.toUpperCase();
+
     const getUser = await User.findOne({
       where: {
         name: req.body.name,
@@ -96,7 +98,7 @@ router.put('/:id', async (req, res, next) => {
     if (!updatedUser) {
       res.sendStatus(404);
     } else {
-      updatedUser.update(req.body);
+      await updatedUser.update(req.body);
 
       res.send(updatedUser);
     }
