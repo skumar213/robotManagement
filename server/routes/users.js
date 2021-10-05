@@ -58,7 +58,8 @@ router.get('/teachers', async (req, res, next) => {
 router.delete('/:id', async (req, res, next) => {
   try {
     if (isNaN(req.params.id)) {
-      res.send(400);
+      res.sendStatus(400);
+      return;
     }
 
     const user = await User.findByPk(req.params.id);
