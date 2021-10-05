@@ -1,6 +1,22 @@
 const Sequelize = require('sequelize');
 const db = require('./db');
 
+// const User = db.define('user', {
+//   name: {
+//     type: Sequelize.STRING,
+//     allowNull: false,
+//     unique: true,
+//     validate: {
+//       notEmpty: true,
+//     },
+//   },
+//   userType: {
+//     type: Sequelize.ENUM('STUDENT', 'TEACHER'),
+//     defaultValue: 'STUDENT',
+//     allowNull: false,
+//   },
+// });
+
 const User = db.define('user', {
   name: {
     type: Sequelize.STRING,
@@ -14,6 +30,18 @@ const User = db.define('user', {
     type: Sequelize.ENUM('STUDENT', 'TEACHER'),
     defaultValue: 'STUDENT',
     allowNull: false,
+  },
+  isStudent: {
+    type: Sequelize.DataTypes.VIRTUAL,
+    get() {
+      return this.userType === 'STUDENT' ? true : false;
+    },
+  },
+  isTeacher: {
+    type: Sequelize.DataTypes.VIRTUAL,
+    get() {
+      return this.userType === 'TEACHER' ? true : false;
+    },
   },
 });
 

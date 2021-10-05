@@ -37,4 +37,23 @@ router.get('/teachers', async (req, res, next) => {
   }
 });
 
+router.delete('/:id', async (req, res, next) => {
+  try {
+    if (isNaN(req.params.id)) {
+      res.send(400);
+    }
+
+    const user = await User.findByPk(req.params.id);
+
+    if (!user) {
+      res.sendStatus(404);
+    } else {
+      user.destroy();
+      res.sendStatus(204);
+    }
+  } catch (e) {
+    next(e);
+  }
+});
+
 module.exports = router;
