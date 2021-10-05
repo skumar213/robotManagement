@@ -56,56 +56,7 @@ User.findTeachersAndMentees = function () {
   return teachers;
 };
 
-// //hooks
-
-// User.beforeUpdate(async (user) => {
-//   const mentor = await User.findByPk(user.mentorId);
-
-//   console.log(user.changed());
-
-//   if (
-//     user.dataValues.mentorId !== user._previousDataValues.mentorId &&
-//     mentor !== null &&
-//     !mentor.isTeacher
-//   ) {
-//     throw new Error(
-//       `We shouldn't be able to update ${user.name} with ${mentor.name} as a mentor, because ${mentor.name} is not a TEACHER`
-//     );
-//   } else if (
-//     user.dataValues.userType !== user._previousDataValues.userType &&
-//     user.mentorId !== null
-//   ) {
-//     throw new Error(
-//       `We shouldn't be able to update ${user.name} to a TEACHER, because ${mentor.name} is their mentor`
-//     );
-//   } else if (user.dataValues.userType !== user._previousDataValues.userType) {
-//     const allMentors = await User.findAll({
-//       where: {
-//         mentorId: {
-//           [Op.ne]: null,
-//         },
-//       },
-//     });
-
-//     const mentorIds = allMentors.map((obj) => obj.mentorId);
-
-//     if (mentorIds.includes(user.id)) {
-//       const student = await User.findAll({
-//         where: {
-//           mentorId: user.id,
-//         },
-//       });
-
-//       const names = student.map((obj) => obj.name);
-
-//       throw new Error(
-//         `We shouldn't be able to update ${
-//           user.name
-//         } to a STUDENT, because they have mentee/s: ${names.join(', ')}`
-//       );
-//     }
-//   }
-// });
+//instance methods
 
 User.prototype.getPeers = function () {
   const mentorsStudents = User.findAll({
