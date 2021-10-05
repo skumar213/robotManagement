@@ -76,4 +76,19 @@ router.post('/', async (req, res, next) => {
   }
 });
 
+router.put('/:id', async (req, res, next) => {
+  try {
+    const updatedUser = await User.findByPk(req.params.id);
+    if (!updatedUser) {
+      res.sendStatus(404);
+    } else {
+      updatedUser.update(req.body);
+
+      res.send(updatedUser);
+    }
+  } catch (e) {
+    next(e);
+  }
+});
+
 module.exports = router;

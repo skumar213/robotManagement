@@ -1,4 +1,5 @@
 const Sequelize = require('sequelize');
+const { Op } = require('sequelize');
 const db = require('./db');
 
 const User = db.define('user', {
@@ -85,6 +86,28 @@ User.beforeUpdate(async (user) => {
     throw new Error(
       `We shouldn't be able to update ${user.name} to a TEACHER, because ${mentor.name} is their mentor`
     );
+  } else if (user.dataValues.userType !== user._previousDataValues.userType) {
+    const allMentors = await User.findAll({
+      where: {
+        mentorId: {
+          [Op.ne]: null,
+        },
+      },
+    });
+
+    const mentorIds = allMentors.map((obj) => obj.mentorId);
+
+    if (mentorIds.includes(user.id)) {
+      const student = await User.findOne({
+        where: {
+          mentorId: user.id,
+        },
+      });
+
+      throw new Error(
+        `We shouldn't be able to update ${user.name} to a STUDENT, because ${student.name} is their mentee`
+      );
+    }
   }
 });
 
