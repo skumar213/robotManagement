@@ -74,47 +74,51 @@ User.prototype.getPeers = function () {
 //hooks
 
 User.beforeUpdate(async (user) => {
-  const changedItem = user.changed();
-  const mentor = await User.findByPk(user.mentorId);
+  try {
+    const changedItem = user.changed();
+    const mentor = await User.findByPk(user.mentorId);
 
-  if (
-    changedItem.includes('mentorId') &&
-    mentor !== null &&
-    !mentor.isTeacher
-  ) {
-    throw new Error(
-      `We shouldn't be able to update ${user.name} with ${mentor.name} as a mentor, because ${mentor.name} is not a TEACHER`
-    );
-  } else if (changedItem.includes('userType') && user.mentorId !== null) {
-    throw new Error(
-      `We shouldn't be able to update ${user.name} to a TEACHER, because ${mentor.name} is their mentor`
-    );
-  } else if (changedItem.includes('userType')) {
-    const allMentors = await User.findAll({
-      where: {
-        mentorId: {
-          [Op.ne]: null,
-        },
-      },
-    });
-
-    const mentorIds = allMentors.map((obj) => obj.mentorId);
-
-    if (mentorIds.includes(user.id)) {
-      const student = await User.findAll({
+    if (
+      changedItem.includes('mentorId') &&
+      mentor !== null &&
+      !mentor.isTeacher
+    ) {
+      throw new Error(
+        `We shouldn't be able to update ${user.name} with ${mentor.name} as a mentor, because ${mentor.name} is not a TEACHER`
+      );
+    } else if (changedItem.includes('userType') && user.mentorId !== null) {
+      throw new Error(
+        `We shouldn't be able to update ${user.name} to a TEACHER, because ${mentor.name} is their mentor`
+      );
+    } else if (changedItem.includes('userType')) {
+      const allMentors = await User.findAll({
         where: {
-          mentorId: user.id,
+          mentorId: {
+            [Op.ne]: null,
+          },
         },
       });
 
-      const names = student.map((obj) => obj.name);
+      const mentorIds = allMentors.map((obj) => obj.mentorId);
 
-      throw new Error(
-        `We shouldn't be able to update ${
-          user.name
-        } to a STUDENT, because they have mentee/s: ${names.join(', ')}`
-      );
+      if (mentorIds.includes(user.id)) {
+        const student = await User.findAll({
+          where: {
+            mentorId: user.id,
+          },
+        });
+
+        const names = student.map((obj) => obj.name);
+
+        throw new Error(
+          `We shouldn't be able to update ${
+            user.name
+          } to a STUDENT, because they have mentee/s: ${names.join(', ')}`
+        );
+      }
     }
+  } catch (e) {
+    throw new Error(e);
   }
 });
 
