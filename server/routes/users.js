@@ -28,4 +28,13 @@ router.get('/unassigned', async (req, res, next) => {
   }
 });
 
+router.get('/teachers', async (req, res, next) => {
+  try {
+    const teachers = await User.findTeachersAndMentees();
+    res.send(teachers);
+  } catch (e) {
+    next(e);
+  }
+});
+
 module.exports = router;

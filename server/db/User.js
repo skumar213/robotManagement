@@ -29,6 +29,20 @@ User.findUnassignedStudents = function () {
   return studentNoMentor;
 };
 
+User.findTeachersAndMentees = function () {
+  const teachers = User.findAll({
+    where: {
+      userType: 'TEACHER',
+    },
+    include: {
+      model: User,
+      as: 'mentees',
+    },
+  });
+
+  return teachers;
+};
+
 /**
  * We've created the association for you!
  *
