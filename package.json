@@ -30,7 +30,7 @@
   "devDependencies": {
     "@babel/core": "^7.10.4",
     "ascii-table": "0.0.9",
-    "axios": "^0.19.2",
+    "axios": "^0.22.0",
     "babel-loader": "^8.1.0",
     "chai": "^4.2.0",
     "chai-as-promised": "^7.1.1",
