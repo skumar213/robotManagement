@@ -27,7 +27,7 @@ describe('Tier 5: Sequelize Update Hook, PUT Routes, Express Error Handling', ()
     });
 
     describe('Updating: mentorId', () => {
-      xit('cannot update a user with a mentor who is not a TEACHER', async () => {
+      it('cannot update a user with a mentor who is not a TEACHER', async () => {
         const freddy = await User.create({ name: 'FREDDY' });
         const jerry = await User.create({ name: 'JERRY' });
         const updateJerryPromise = jerry.update({ mentorId: freddy.id });
@@ -36,7 +36,7 @@ describe('Tier 5: Sequelize Update Hook, PUT Routes, Express Error Handling', ()
         await expect(updateJerryPromise, errMessage).to.be.rejected;
       });
 
-      xit('can update a user with a mentor who is a TEACHER', async () => {
+      it('can update a user with a mentor who is a TEACHER', async () => {
         const freddy = await User.create({
           name: 'FREDDY',
           userType: 'TEACHER',
@@ -50,7 +50,7 @@ describe('Tier 5: Sequelize Update Hook, PUT Routes, Express Error Handling', ()
 
     describe('Updating: userType', () => {
       describe('STUDENT -> TEACHER', () => {
-        xit('cannot change userType from STUDENT to TEACHER when user has a mentor', async () => {
+        it('cannot change userType from STUDENT to TEACHER when user has a mentor', async () => {
           const freddy = await User.create({
             name: 'FREDDY',
             userType: 'TEACHER',
@@ -65,7 +65,7 @@ describe('Tier 5: Sequelize Update Hook, PUT Routes, Express Error Handling', ()
           await expect(updateJerryPromise, errMessage).to.be.rejected;
         });
 
-        xit('can change userType from STUDENT to TEACHER when user does not have a mentor', async () => {
+        it('can change userType from STUDENT to TEACHER when user does not have a mentor', async () => {
           const jerry = await User.create({ name: 'JERRY' });
           const promotedJerry = await jerry.update({ userType: 'TEACHER' });
           expect(promotedJerry.userType).to.equal('TEACHER');

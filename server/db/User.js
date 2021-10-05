@@ -1,22 +1,6 @@
 const Sequelize = require('sequelize');
 const db = require('./db');
 
-// const User = db.define('user', {
-//   name: {
-//     type: Sequelize.STRING,
-//     allowNull: false,
-//     unique: true,
-//     validate: {
-//       notEmpty: true,
-//     },
-//   },
-//   userType: {
-//     type: Sequelize.ENUM('STUDENT', 'TEACHER'),
-//     defaultValue: 'STUDENT',
-//     allowNull: false,
-//   },
-// });
-
 const User = db.define('user', {
   name: {
     type: Sequelize.STRING,
@@ -70,6 +54,39 @@ User.findTeachersAndMentees = function () {
 
   return teachers;
 };
+
+//hooks
+
+//can't update user with mentor who is not a teacher
+// User.beforeUpdate(async (user) => {
+//   const mentor = await User.findByPk(user.mentorId);
+
+//   if (!mentor.isTeacher) {
+//     throw new Error(
+//       `We shouldn't be able to update ${user.name} with ${mentor.name} as a mentor, because ${mentor.name} is not a TEACHER`
+//     );
+//   }
+// });
+
+User.beforeUpdate(async (user) => {
+  const mentor = await User.findByPk(user.mentorId);
+
+  if (
+    user.dataValues.mentorId !== user._previousDataValues.mentorId &&
+    !mentor.isTeacher
+  ) {
+    throw new Error(
+      `We shouldn't be able to update ${user.name} with ${mentor.name} as a mentor, because ${mentor.name} is not a TEACHER`
+    );
+  } else if (
+    user.dataValues.userType !== user._previousDataValues.userType &&
+    user.mentorId !== null
+  ) {
+    throw new Error(
+      `We shouldn't be able to update ${user.name} to a TEACHER, because ${mentor.name} is their mentor`
+    );
+  }
+});
 
 /**
  * We've created the association for you!
