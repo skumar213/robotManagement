@@ -77,6 +77,7 @@ User.beforeUpdate(async (user) => {
 
   if (
     user.dataValues.mentorId !== user._previousDataValues.mentorId &&
+    mentor !== null &&
     !mentor.isTeacher
   ) {
     throw new Error(
@@ -109,28 +110,14 @@ User.beforeUpdate(async (user) => {
 
       const names = student.map((obj) => obj.name);
 
-      console.log(names);
-
       throw new Error(
         `We shouldn't be able to update ${
           user.name
-        } to a STUDENT, because ${names.join(', ')} is their mentee`
+        } to a STUDENT, because they have mentee/s: ${names.join(', ')}`
       );
     }
   }
 });
-
-// User.beforeUpdate(async (user) => {
-//   const itemsChanged = user._changed.has('userType');
-
-//   console.log('----------------', itemsChanged);
-
-//   if (itemsChanged === true) {
-//     console.log('----------------', itemsChanged);
-
-//     throw new Error('update error');
-//   }
-// });
 
 /**
  * We've created the association for you!

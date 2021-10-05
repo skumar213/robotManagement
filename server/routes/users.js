@@ -20,16 +20,20 @@ const {
 // Add your routes here:
 
 router.get('/', async (req, res, next) => {
-  const username = req.query.name;
-  const allUsers = await User.findAll({
-    where: {
-      name: {
-        [Op.iLike]: `%${username}%`,
+  try {
+    const username = req.query.name;
+    const allUsers = await User.findAll({
+      where: {
+        name: {
+          [Op.iLike]: `%${username}%`,
+        },
       },
-    },
-  });
+    });
 
-  res.send(allUsers);
+    res.send(allUsers);
+  } catch (e) {
+    next(e);
+  }
 });
 
 router.get('/unassigned', async (req, res, next) => {
