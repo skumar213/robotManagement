@@ -14,7 +14,7 @@ Demo Video: https://www.youtube.com/watch?v=UvQr92H9BqI
 * Node.js
 * Sequelize (PostgreSQL)
 
-# To run the project yourself:
+# Setup & Start:
 1. Install dependencies: npm install
 2. Create a database called final_project
 3. Sync and seed your database by running npm run seed
