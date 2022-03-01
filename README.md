@@ -15,7 +15,7 @@ Demo Video: https://www.youtube.com/watch?v=UvQr92H9BqI
 * Sequelize (PostgreSQL)
 
 # To run the project yourself:
-1. Clone the project
-2. Using Visual studio code type "npm install" in your terminal
-3. When complete -> "npm run start:dev"
-4. http://localhost:1337/
+1. Install dependencies: npm install
+2. Create a database called final_project
+3. Sync and seed your database by running npm run seed
+4. Use npm run start:dev to start a local server (on port 1337)
